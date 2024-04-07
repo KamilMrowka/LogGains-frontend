@@ -1,0 +1,17 @@
+.bg-dark-grey {
+    background-color: #2C2C2C;
+}
+
+.whole-viewport {
+    margin: 0;
+    height: 100vh;
+}
+
+.main-container {
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: start ;
+    background-color: #2C2C2C;
+}
+

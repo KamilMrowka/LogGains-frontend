@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="7f2941eb-5eca-41d0-b70c-0d7f0d1b8152" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="TypeScript JSX File" />
+      </list>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2cRfBeuiT16U3QWgRAR7tqpAd4f" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/kamil/MoshCourse&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\kamil\\vite-project\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\kamil\vite-project\src\components" />
+      <recent name="C:\Users\kamil\vite-project\src\pages" />
+      <recent name="C:\Users\kamil\vite-project\src\assets" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7f2941eb-5eca-41d0-b70c-0d7f0d1b8152" name="Changes" comment="" />
+      <created>1708079179592</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1708079179592</updated>
+      <workItem from="1708079181360" duration="150000" />
+      <workItem from="1708261562534" duration="514000" />
+      <workItem from="1708264292773" duration="7627000" />
+      <workItem from="1708280691742" duration="1272000" />
+      <workItem from="1708285163568" duration="2493000" />
+      <workItem from="1708335311058" duration="1597000" />
+      <workItem from="1708337518297" duration="526000" />
+      <workItem from="1708404964014" duration="7231000" />
+      <workItem from="1708508804298" duration="129000" />
+      <workItem from="1708798141050" duration="2209000" />
+      <workItem from="1708808774636" duration="579000" />
+      <workItem from="1708854304580" duration="9263000" />
+      <workItem from="1709022537583" duration="12472000" />
+      <workItem from="1709045041967" duration="1834000" />
+      <workItem from="1709048685088" duration="31000" />
+      <workItem from="1709049060615" duration="459000" />
+      <workItem from="1709056978613" duration="830000" />
+      <workItem from="1709285381891" duration="1978000" />
+      <workItem from="1709403476813" duration="1909000" />
+      <workItem from="1709460233858" duration="11000" />
+      <workItem from="1709460327511" duration="6000" />
+      <workItem from="1709460457233" duration="14000" />
+      <workItem from="1709485984543" duration="3169000" />
+      <workItem from="1709498452201" duration="637000" />
+      <workItem from="1709633135704" duration="4671000" />
+      <workItem from="1709716927772" duration="11000" />
+      <workItem from="1709973008787" duration="13890000" />
+      <workItem from="1710176388642" duration="7571000" />
+      <workItem from="1710232536693" duration="5106000" />
+      <workItem from="1710237696486" duration="12711000" />
+      <workItem from="1710316141251" duration="13906000" />
+      <workItem from="1710338875862" duration="631000" />
+      <workItem from="1710427170102" duration="514000" />
+      <workItem from="1710511275271" duration="1047000" />
+      <workItem from="1710599432733" duration="1230000" />
+      <workItem from="1710944336698" duration="1865000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.env" />
+  </component>
+</project>
