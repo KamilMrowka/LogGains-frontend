@@ -4,11 +4,17 @@
 import LoginForm from "../components/LoginForm.tsx";
 import {useState} from "react";
 import RegisteringForm from "../components/RegisteringForm.tsx";
+import { motion } from "framer-motion";
 
 export default function LoginPage() {
     const [whichForm, setWhichForm]  = useState("logging");
     return (
-        <div className={"row justify-content-center align-items-center m-1"}>
+        <motion.div className={"row justify-content-center align-items-center m-1"}
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            transition={{ duration: 1 }}
+            exit={{ opacity: 0 }} 
+        >
             <div className={"col-4 m-5"}>
                 <div className={"row text-white"}>
                     <h1>Welcome to LOGgains</h1>
@@ -25,6 +31,6 @@ export default function LoginPage() {
                 <LoginForm setForm={setWhichForm}></LoginForm> :
                 <RegisteringForm setForm={setWhichForm}></RegisteringForm>
             }
-        </div>
+        </motion.div>
     );
 }

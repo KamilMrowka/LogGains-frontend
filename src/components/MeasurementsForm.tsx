@@ -1,0 +1,74 @@
+import axios from "axios"
+import { ChangeEvent, useRef, useState } from "react";
+import '../styles/number.css';
+interface dayMeasurements {
+    caloriesConsumed: number,
+    weightMeasurement: number,
+}
+
+interface Props {
+    type: "save" | "update",
+}
+export default function MeasurementsForm ( { type } : Props) {
+
+    const weightRef = useRef<HTMLInputElement>(null);
+    const caloriesRef = useRef<HTMLInputElement>(null);
+
+    const formRequest = (): dayMeasurements => {
+        if (weightRef.current != null && caloriesRef.current != null) {
+        let weight: number = parseFloat(weightRef.current.value);
+        let calories: number = parseFloat(caloriesRef.current.value);
+        if (!isNaN(weight)) {
+            weight = parseFloat(weight.toFixed(2));
+        } else  {
+            weight = 0;
+        }
+        if (!isNaN(calories)) {
+            calories = parseFloat(calories.toFixed(2));
+        } else {
+            calories = 0;
+        }
+        const request: dayMeasurements = {
+            caloriesConsumed: calories,
+            weightMeasurement: weight,
+        }
+        return request;
+        } else {
+            return {
+                caloriesConsumed: 0,
+                weightMeasurement: 0
+            }
+        }    
+    }
+    
+
+    const handleSaveSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
+        event.preventDefault;
+        const request: dayMeasurements = formRequest();
+        await axios.post("http://localhost:8080/api/v1/day", request, {headers: {"Authorization": "Bearer " + localStorage.getItem('420token')}})
+        .then(response => {
+            console.log(response);
+        })
+        .catch(() => {
+
+        });
+    }
+    return (
+        <>
+            <h2 className="col-5 pt-2 pb-1">Today:</h2>
+            <form className="col-5" onSubmit={handleSaveSubmit}>
+                <div className="input-group">
+                    <input id="weightInput" ref={weightRef} type="number" step='0.01' min="0" placeholder="weight" className="form-control mb-2 text-light bg-dark"></input>
+                    <span className="input-group-text text-white bg-dark mb-2">kg</span>
+                </div>
+                <div className="input-group">
+                    <input id={"caloriesInput"} type="number" ref={caloriesRef} placeholder="calories" className="form-control mb-2 text-light bg-dark"></input>
+                    <span className="input-group-text text-white bg-dark mb-2">kcal</span>
+                </div>
+                <div>
+                    <button type="submit" className="btn btn-dark text-white container-fluid border-light">{type == "save" ? "Save" : "Update"}</button>
+                </div>
+            </form>
+        </>
+    )
+}

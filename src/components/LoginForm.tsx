@@ -86,7 +86,8 @@ export default function LoginForm ({ setForm }: Props) {
             await axios.post('http://localhost:8080/api/v1/auth/login', request)
             .then(response => {
                 if (response.status === 200) {
-                    localStorage.setItem('token', response.data['token']);
+                    console.log(response.data['token']);
+                    localStorage.setItem('420token', response.data['token']);
                     navigate('/');
                 }
             })
