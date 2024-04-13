@@ -6,6 +6,7 @@ import LoadingPage from "./LoadingPage.tsx";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import MeasurementsForm from "../components/MeasurementsForm.tsx";
+import constructData, { graphData } from "../functions/constructData.ts";
 
 interface Day {
     dayId: number,
@@ -23,27 +24,37 @@ interface Week {
     lastDay: string
 }
 
-interface homePageResponse {
+export interface homePageResponse {
     dayList: Day[],
     week: Week,
     averageCalories: number,
     medianWeight: number,
     weekDays: string[]
 }
+
+export interface dayData {
+    date: string,
+    weight: number | null
+}
 export default function HomePage() {
+    const [formType, setFormType] = useState<( "save" | "update" )>("save");
     const [isLoading, setIsLoading] = useState(true);
     let weekDays: string[] = [];
+    let data: graphData;
     let weekMeasurements: ( number | null )[] = [] 
     const [responseData, setResponseData] = useState<homePageResponse>();
-
     const chartRef = useRef<HTMLCanvasElement | null>(null);
-
     Chart.register(LineController, CategoryScale, LinearScale, PointElement, LineElement, Tooltip);
-
-    const navigate = useNavigate();
-
     let lowestWeight: number;
     let highestWeight: number;
+    const navigate = useNavigate();
+
+    if (responseData) {
+        data = constructData(responseData);
+        lowestWeight = data.lowestWeight;
+        highestWeight = data.highestWeight;
+    }
+
 
     useEffect(() => {
         const token = 'Bearer ' + localStorage.getItem('420token');
@@ -62,66 +73,61 @@ export default function HomePage() {
         getHomePage();
     }, [])
 
-    if (responseData) {
-        if (Array.isArray(responseData.weekDays) && Array.isArray(responseData.dayList)) {
-            weekDays = responseData.weekDays.map(function(day){
-                let dateParts = day.split("-");
-                const shortDate = dateParts[2] + "." + dateParts[1];
-                return shortDate;
-            });
+    // if (responseData) {
+    //     if (Array.isArray(responseData.weekDays) && Array.isArray(responseData.dayList)) {
+    //         weekDays = responseData.weekDays.map(function(day){
+    //             let dateParts = day.split("-");
+    //             const shortDate = dateParts[2] + "." + dateParts[1];
+    //             return shortDate;
+    //         });
             
-            if (responseData.dayList.length != 0) {
-                let counter = 0;
-                lowestWeight = responseData.dayList[counter].weightMeasurement;
-                highestWeight = responseData.dayList[counter].weightMeasurement;
-                weekDays.forEach(day => {
-                    const checkDay: Day = responseData.dayList[counter];
-                    let dateParts: string[] = checkDay.date.split("-");
-                    const shortDate = dateParts[2] + "." + dateParts[1];
-                    if (day == shortDate) {
+    //         if (responseData.dayList.length != 0) {
+    //             let counter = 0;
+    //             lowestWeight = responseData.dayList[counter].weightMeasurement;
+    //             highestWeight = responseData.dayList[counter].weightMeasurement;
+    //             weekDays.forEach(day => {
+    //                 const checkDay: Day = responseData.dayList[counter];
+    //                 let dateParts: string[] = checkDay.date.split("-");
+    //                 const shortDate = dateParts[2] + "." + dateParts[1];
+    //                 if (day == shortDate) {
                         
-                        if (checkDay.weightMeasurement > highestWeight) {
-                            highestWeight = checkDay.weightMeasurement;
-                        } else if (checkDay.weightMeasurement < lowestWeight) {
-                            lowestWeight = checkDay.weightMeasurement;
-                        }
+    //                     if (checkDay.weightMeasurement > highestWeight) {
+    //                         highestWeight = checkDay.weightMeasurement;
+    //                     } else if (checkDay.weightMeasurement < lowestWeight) {
+    //                         lowestWeight = checkDay.weightMeasurement;
+    //                     }
                 
-                        weekMeasurements.push(checkDay.weightMeasurement);
-                        if (counter < responseData.dayList.length - 1) {
-                            counter++;
-                        }
-                    } else {
-                        weekMeasurements.push(null);
-                    }
-                })
-            }
-            console.log(weekMeasurements);
-        } else {
-        }
-    }
+    //                     weekMeasurements.push(checkDay.weightMeasurement);
+    //                     if (counter < responseData.dayList.length - 1) {
+    //                         counter++;
+    //                     }
+    //                 } else {
+    //                     weekMeasurements.push(null);
+    //                 }
+    //             })
+    //         }
+    //     } else {
+    //     }
+    // }
     
 
 
     useEffect(() => {
-
         if (chartRef.current && responseData) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
-                new Chart(
-                    ctx,
+                new Chart(ctx, 
                     {
                         type: "line",
                         data: {
-                            labels: weekDays.map(row => row),
-                            datasets: [
-                                {
-                                    data: weekMeasurements.map(row => row),
-                                    borderColor: 'rgb(76, 187, 23)',
-                                    tension: 0.3,
-                                    pointRadius: ( responseData?.dayList.length > 1 ) ? 3 : 8,
-                                    pointBorderWidth: (responseData.dayList.length > 1 ) ? 1 : 3,
-                                }
-                            ]
+                            labels: data.dayData.map(row => row.date),
+                            datasets: [{
+                                data: data.dayData.map(row => row.weight),
+                                borderColor: 'rgb(76, 187, 23)',
+                                tension: 0.3,
+                                pointRadius: ( responseData?.dayList.length > 1 ) ? 3 : 8,
+                                pointBorderWidth: (responseData.dayList.length > 1 ) ? 1 : 3,
+                            }]
                         },
                         options: {
                             plugins: {
@@ -198,7 +204,7 @@ export default function HomePage() {
                                     <canvas ref={chartRef} />
                                 </div>
                                 <div className="flex-column ps-5 pt-4 d-flex container-fluid justify-content-start align-items-center">
-                                   <MeasurementsForm></MeasurementsForm> 
+                                   <MeasurementsForm type={formType}></MeasurementsForm> 
                                 </div>
                             </div>
                         </div>
