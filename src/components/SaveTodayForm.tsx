@@ -1,18 +1,16 @@
 import axios from "axios"
-import { ChangeEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import '../styles/number.css';
 interface dayMeasurements {
     caloriesConsumed: number,
     weightMeasurement: number,
 }
 
-interface Props {
-    type: "save" | "update",
-}
-export default function MeasurementsForm ( { type } : Props) {
+export default function MeasurementsForm () {
 
     const weightRef = useRef<HTMLInputElement>(null);
     const caloriesRef = useRef<HTMLInputElement>(null);
+    const [isEmpty, setEmpty] = useState(true);
 
     const formRequest = (): dayMeasurements => {
         if (weightRef.current != null && caloriesRef.current != null) {
@@ -46,19 +44,29 @@ export default function MeasurementsForm ( { type } : Props) {
         event.preventDefault;
         const request: dayMeasurements = formRequest();
         await axios.post("http://localhost:8080/api/v1/day", request, {headers: {"Authorization": "Bearer " + localStorage.getItem('420token')}})
-        .then(response => {
-            console.log(response);
+        .then(() => {
+
         })
         .catch(() => {
 
         });
     }
+
+    const handleChange = () => {
+        if (weightRef.current != null && caloriesRef.current != null) {
+            if (weightRef.current.value == "" && caloriesRef.current.value == "") {
+                setEmpty(true);
+            } else {
+                setEmpty(false);
+            }
+        }
+    }
+
     return (
-        <>
-            <h2 className="col-5 pt-2 pb-1">Today:</h2>
-            <form className="col-5" onSubmit={handleSaveSubmit}>
+        <div className="col-7">
+            <form className="mt-2 pt-1" onSubmit={handleSaveSubmit}>
                 <div className="input-group">
-                    <input id="weightInput" ref={weightRef} type="number" step='0.01' min="0" placeholder="weight" className="form-control mb-2 text-light bg-dark"></input>
+                    <input id="weightInput" ref={weightRef} onChange={handleChange} type="number" step='0.01' min="0" placeholder="weight" className="form-control mb-2 text-light bg-dark"></input>
                     <span className="input-group-text text-white bg-dark mb-2">kg</span>
                 </div>
                 <div className="input-group">
@@ -66,9 +74,9 @@ export default function MeasurementsForm ( { type } : Props) {
                     <span className="input-group-text text-white bg-dark mb-2">kcal</span>
                 </div>
                 <div>
-                    <button type="submit" className="btn btn-dark text-white container-fluid border-light">{type == "save" ? "Save" : "Update"}</button>
+                    <button type="submit" className={"btn btn-dark text-white container-fluid border-light " + (isEmpty && "disabled")}>Save</button>
                 </div>
             </form>
-        </>
+        </div>
     )
 }

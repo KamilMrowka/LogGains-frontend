@@ -1,17 +1,20 @@
-import { homePageResponse, dayData } from '../pages/HomePage'
+import { HomePageResponse, dayData, Today } from '../pages/HomePage'
 
 export interface graphData {
     dayData: dayData[],
     lowestWeight: number,
     highestWeight: number,
+    today: Today
+
 }
 
-export default function constructData({ dayList, weekDays }: homePageResponse) {
+export default function constructData({ dayList, weekDays }: HomePageResponse, todayDate: string) {
     let dayData: dayData[] = [];
     let counter = 0;
     let dayListLength = dayList.length;
-    let lowestWeight: number = 0;
-    let highestWeight: number = 0;
+    let lowestWeight: number = 50;
+    let highestWeight: number = 98;
+    let today: Today = {date: "", weight: 0, calories: 0}
 
     if (dayListLength > 0) {
         lowestWeight = dayList[counter].weightMeasurement;
@@ -38,6 +41,14 @@ export default function constructData({ dayList, weekDays }: homePageResponse) {
                     date: shortWeekDayDate,
                     weight: (weightMeasurement != 0 ? weightMeasurement : null)
                 }
+
+                if (day.date === todayDate && day.weight != null) {
+                    today = {
+                        date: day.date,
+                        weight: day.weight,
+                        calories: dayList[counter].caloriesConsumed
+                    };
+                }
                 dayData.push(day);
                 if (counter < dayListLength - 1) {
                     counter++;
@@ -56,10 +67,12 @@ export default function constructData({ dayList, weekDays }: homePageResponse) {
             })
         }
     })
+    
     const data: graphData = {
         dayData: dayData,
         lowestWeight: lowestWeight,
         highestWeight: highestWeight,
+        today: today
     }
 
     return data;

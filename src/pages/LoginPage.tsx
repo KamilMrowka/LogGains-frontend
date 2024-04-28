@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 export default function LoginPage() {
     const [whichForm, setWhichForm]  = useState("logging");
     return (
-        <motion.div className={"row justify-content-center align-items-center m-1"}
+        <motion.div className={"d-flex justify-content-evenly"}
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             transition={{ duration: 1 }}

@@ -5,8 +5,9 @@ import axios from "axios";
 import LoadingPage from "./LoadingPage.tsx";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import MeasurementsForm from "../components/MeasurementsForm.tsx";
+import SaveTodayForm from "../components/SaveTodayForm.tsx";
 import constructData, { graphData } from "../functions/constructData.ts";
+import UpdateTodayForm from "../components/UpdateTodayForm.tsx";
 
 interface Day {
     dayId: number,
@@ -24,7 +25,7 @@ interface Week {
     lastDay: string
 }
 
-export interface homePageResponse {
+export interface HomePageResponse {
     dayList: Day[],
     week: Week,
     averageCalories: number,
@@ -36,23 +37,37 @@ export interface dayData {
     date: string,
     weight: number | null
 }
+
+export interface Today {
+    weight: number | null,
+    calories: number | null,
+    date: string,
+}
 export default function HomePage() {
-    const [formType, setFormType] = useState<( "save" | "update" )>("save");
     const [isLoading, setIsLoading] = useState(true);
-    let weekDays: string[] = [];
+    let formType: "save" | "update" = "save";
     let data: graphData;
-    let weekMeasurements: ( number | null )[] = [] 
-    const [responseData, setResponseData] = useState<homePageResponse>();
+    const [responseData, setResponseData] = useState<HomePageResponse>();
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     Chart.register(LineController, CategoryScale, LinearScale, PointElement, LineElement, Tooltip);
     let lowestWeight: number;
     let highestWeight: number;
     const navigate = useNavigate();
-
+    const date: Date = new Date();
+    const formatedDate: string = date.getDate() + "." + (date.getMonth() > 9 ? (date.getMonth() + 1) : ("0" + (date.getMonth() + 1)));
+    let today: Today = {
+        date: "",
+        weight: null,
+        calories: null
+    }
     if (responseData) {
-        data = constructData(responseData);
+        data = constructData(responseData, formatedDate);
         lowestWeight = data.lowestWeight;
         highestWeight = data.highestWeight;
+        today = data.today;
+        if (today.date === formatedDate) {
+            formType = "update";
+        }
     }
 
 
@@ -72,45 +87,6 @@ export default function HomePage() {
         }
         getHomePage();
     }, [])
-
-    // if (responseData) {
-    //     if (Array.isArray(responseData.weekDays) && Array.isArray(responseData.dayList)) {
-    //         weekDays = responseData.weekDays.map(function(day){
-    //             let dateParts = day.split("-");
-    //             const shortDate = dateParts[2] + "." + dateParts[1];
-    //             return shortDate;
-    //         });
-            
-    //         if (responseData.dayList.length != 0) {
-    //             let counter = 0;
-    //             lowestWeight = responseData.dayList[counter].weightMeasurement;
-    //             highestWeight = responseData.dayList[counter].weightMeasurement;
-    //             weekDays.forEach(day => {
-    //                 const checkDay: Day = responseData.dayList[counter];
-    //                 let dateParts: string[] = checkDay.date.split("-");
-    //                 const shortDate = dateParts[2] + "." + dateParts[1];
-    //                 if (day == shortDate) {
-                        
-    //                     if (checkDay.weightMeasurement > highestWeight) {
-    //                         highestWeight = checkDay.weightMeasurement;
-    //                     } else if (checkDay.weightMeasurement < lowestWeight) {
-    //                         lowestWeight = checkDay.weightMeasurement;
-    //                     }
-                
-    //                     weekMeasurements.push(checkDay.weightMeasurement);
-    //                     if (counter < responseData.dayList.length - 1) {
-    //                         counter++;
-    //                     }
-    //                 } else {
-    //                     weekMeasurements.push(null);
-    //                 }
-    //             })
-    //         }
-    //     } else {
-    //     }
-    // }
-    
-
 
     useEffect(() => {
         if (chartRef.current && responseData) {
@@ -173,7 +149,6 @@ export default function HomePage() {
                                     min: Math.ceil(lowestWeight - lowestWeight * 0.02),
                                     max: Math.ceil(highestWeight + highestWeight * 0.02),
                                     beginAtZero: false,
-                                    suggestedMin: 1,
                                 },
                             },
                         }
@@ -188,23 +163,38 @@ export default function HomePage() {
         <> 
             {isLoading ? <AnimatePresence mode="wait"><LoadingPage></LoadingPage></AnimatePresence> :
                 (
-                    <motion.div className={"container-fluid flex-column p-0 align-self-start"}
+                    <motion.div className={"container-fluid flex-column p-0 align-self-start mb-1"}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 1 }}
                         exit={{ opacity: 0 }}
                     >
                         <Navbar></Navbar>
-                        <div className={"container-fluid d-flex text-white p-4 justify-content-evenly align-items-start"}>
-                            <div className="flex-row d-flex container-fluid ps-3 p-3 pe-3 justify-conent-evenly">
-                                <div className={"col-7 text-center"}>
+                        <div className={"container-fluid d-flex text-white p-4 justify-content-evenly align-self-center align-items-start"}>
+                            <div className="flex-row d-flex container-fluid p-3 justify-conent-evenly row row-cols-2">
+                                <div className={"col-8 text-center"}>
                                     <div className="pb-3">
                                         <h1> Your weight this week:</h1>
                                     </div>
                                     <canvas ref={chartRef} />
                                 </div>
-                                <div className="flex-column ps-5 pt-4 d-flex container-fluid justify-content-start align-items-center">
-                                   <MeasurementsForm type={formType}></MeasurementsForm> 
+                                <div className="vr m-4 text-secondary d-none "></div>
+                                <div className="d-flex flex-column container-fluid justify-content-start align-items-center">
+                                    <h1 className="text-center pb-3">Today:</h1>
+                                   {formType === "save" ? <SaveTodayForm></SaveTodayForm> : 
+                                   <UpdateTodayForm 
+                                        weight={today.weight}
+                                        calories={today.calories}
+                                        date={today.date}
+                                    ></UpdateTodayForm>}
+                                    <div className="col-12 text-secondary m-4">
+                                        <hr/>
+                                    </div>
+                                    <h1 className="text-center pb-3">This week:</h1>
+                                    <div>Median weight: som kg</div>
+                                    <div>Lowest weight: som kg</div>
+                                    <div>Highest weight: som kg</div>
+                                    <div>Average deficit: som kcal</div>
                                 </div>
                             </div>
                         </div>
