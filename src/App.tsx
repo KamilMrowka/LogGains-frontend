@@ -6,12 +6,10 @@ import LoginPage from "./pages/LoginPage.tsx";
 
 function App() {
     return (
-        <div className={"main-container"}>
-            <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<LoginPage />} />
-            </Routes>
-        </div>
+        <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+        </Routes>
     )
 }
 

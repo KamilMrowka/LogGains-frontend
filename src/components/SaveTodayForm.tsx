@@ -63,14 +63,14 @@ export default function MeasurementsForm () {
     }
 
     return (
-        <div className="col-7">
-            <form className="mt-2 pt-1" onSubmit={handleSaveSubmit}>
+        <div className="save-today">
+            <form className="" onSubmit={handleSaveSubmit}>
                 <div className="input-group">
-                    <input id="weightInput" ref={weightRef} onChange={handleChange} type="number" step='0.01' min="0" placeholder="weight" className="form-control mb-2 text-light bg-dark"></input>
+                    <input id="weightInput" ref={weightRef} onChange={handleChange} type="number" step='0.01' min="0" placeholder="Weight" className="form-control mb-2 text-light bg-dark placeholder-light"></input>
                     <span className="input-group-text text-white bg-dark mb-2">kg</span>
                 </div>
                 <div className="input-group">
-                    <input id={"caloriesInput"} type="number" ref={caloriesRef} placeholder="calories" className="form-control mb-2 text-light bg-dark"></input>
+                    <input id={"caloriesInput"} type="number" ref={caloriesRef} placeholder="Calories" className="form-control mb-2 text-light bg-dark placeholder-light"></input>
                     <span className="input-group-text text-white bg-dark mb-2">kcal</span>
                 </div>
                 <div>

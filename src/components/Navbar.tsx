@@ -11,23 +11,23 @@ export default function Navbar() {
     
     return (
         <>
-            <nav className={"nav container-fluid bg-black text-center justify-content-center"}>
-                <div className="row container-fluid p-1">
-                    <div className="col-1 p-1 d-flex justify-content-start">
+            <header className={"nav bg-black container-fluid"}>
+                <nav className="main-container d-flex align-self-start justify-content-between align-items-center text-white">
+                    <div className="nav-logo my-2">
                         <img src="/src/assets/bars-graph-svgrepo-com.svg" alt="LOGgains logo" width="50"
                              height="50"></img>
                     </div>
-                    <div className="col d-flex align-self-center justify-content-center text-white">
+                    <div className="">
                         Gains Center
                     </div>
-                    <div className="col d-flex align-self-center justify-content-center text-white">
+                    <div className="">
                         Data Center
                     </div>
-                    <div className="col d-flex align-self-center justify-content-center text-white">
+                    <div className="">
                         <button onClick={handleClick} className={"btn btn-outline-light text-white"}>Log out</button>
                     </div>
-                </div>
-            </nav>
+                </nav>
+            </header>
         </>
     );
 }

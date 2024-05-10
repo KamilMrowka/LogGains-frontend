@@ -209,22 +209,24 @@ export default function RegisteringForm ({ setForm }: Props) {
         return true;
     }
     return (
-        <form onSubmit={handleSubmit} className={"flex-column col-3 p-3 m-5 bg-body rounded-3"}>
-            <div className={"input-group p-1"}>
+        <form onSubmit={handleSubmit} className={"flex-column"}>
+            <div className={"input-group mb-2"}>
                 <input
                     ref={firstNameRef}
                     type={"text"}
                     id={"firstName"}
                     placeholder={"First Name"}
                     autoComplete={"off"}
-                    className={"form-control " + (namesWarning != "" && "is-invalid")}
+                    className={"form-control placeholder-light text-light bg-dark " + (namesWarning != "" && "is-invalid")}
                     onChange={handleChange}
                     onFocus={() => {
                         setIsPasswordInputFocusesd(false)
                     }}
                 />
+            </div>
+            <div className="input-group mb-2">
                 <input
-                    className={"form-control " + (namesWarning != "" && "is-invalid")}
+                    className={"form-control placeholder-light text-light bg-dark " + (namesWarning != "" && "is-invalid")}
                     ref={lastNameRef}
                     id={"lastName"}
                     placeholder={"Last Name"}
@@ -236,14 +238,15 @@ export default function RegisteringForm ({ setForm }: Props) {
                     }}
                 />
             </div>
+
             <div className={"text-danger ps-2 " + (namesWarning === "" && "d-none")}>{namesWarning}</div>
-            <div className={"input-group p-1"}>
+            <div className={"input-group mb-2"}>
                 <input
                     ref={emailRef}
                     onChange={handleChange}
                     type={"text"}
                     id={"email"}
-                    className={"form-control " + (emailWarning != "" && "is-invalid")}
+                    className={"form-control placeholder-light text-light bg-dark " + (emailWarning != "" && "is-invalid")}
                     placeholder={"Email"}
                     autoComplete={"off"}
                     onFocus={() => {
@@ -252,12 +255,12 @@ export default function RegisteringForm ({ setForm }: Props) {
                 />
             </div>
             <div className={"text-danger ps-2 " + (emailWarning === "" && "d-none")}>{emailWarning}</div>
-            <div className={"input-group p-1"}>
+            <div className={"input-group mb-2"}>
                 <input
                     ref={usernameRef}
                     type={"text"}
                     id={"username"}
-                    className={"form-control " + (usernameWarning != "" && "is-invalid")}
+                    className={"form-control placeholder-light text-light bg-dark " + (usernameWarning != "" && "is-invalid")}
                     placeholder={"Username"}
                     autoComplete={"off"}
                     onChange={handleChange}
@@ -266,13 +269,13 @@ export default function RegisteringForm ({ setForm }: Props) {
                     }}
                 />
             </div>
-            <div className={"text-danger ps-2 " + (usernameWarning === "" && "d-none")}>{usernameWarning}</div>
-            <div className={"input-group p-1"}>
+            <div className={"text-danger p-2 " + (usernameWarning === "" && "d-none")}>{usernameWarning}</div>
+            <div className={"input-group mb-2"}>
                 <input
                     ref={passwordRef}
                     type={passwordVisible ? "text" : "password"}
                     id={"password"}
-                    className={"form-control " + (passwordsWarning != "" && "is-invalid")}
+                    className={"form-control placeholder-light text-light bg-dark " + (passwordsWarning != "" && "is-invalid")}
                     placeholder={"Password"}
                     aria-label={"Password"}
                     autoComplete={"off"}
@@ -281,16 +284,16 @@ export default function RegisteringForm ({ setForm }: Props) {
                         setIsPasswordInputFocusesd(true)
                     }}
                 />
-                <button onClick={handleClick} className="btn btn-outline-primary" type="button" id="button-addon1">
+                <button onClick={handleClick} className="btn btn-outline-light" type="button" id="button-addon1">
                     <i className={passwordVisible ? "bi bi-eye-slash-fill" : "bi bi-eye-fill"}></i>
                 </button>
             </div>
-            <div className={"input-group p-1"}>
+            <div className={"input-group mb-2"}>
                 <input
                     ref={passwordConfirmRef}
                     type={passwordVisible ? "text" : "password"}
                     id={"passwordConfirmation"}
-                    className={"form-control " + (passwordsWarning != "" && "is-invalid")}
+                    className={"form-control placeholder-light text-light bg-dark " + (passwordsWarning != "" && "is-invalid")}
                     placeholder={"Confirm password"}
                     aria-label={"Password confirmation"}
                     autoComplete={"off"}
@@ -300,7 +303,7 @@ export default function RegisteringForm ({ setForm }: Props) {
                     }}
                 />
             </div>
-            <div className={"p-2 " + ((!isPasswordInputFocused || validPassword) && "d-none")}>
+            <div className={"" + ((!isPasswordInputFocused || validPassword) && "d-none")}>
                 <ul>
                     <li id={"sixChar"} className={hasSixChar ? "text-success" : "text-danger"}>
                         At least 6 characters long
@@ -321,19 +324,13 @@ export default function RegisteringForm ({ setForm }: Props) {
                 </ul>
             </div>
             <div className={"text-danger ps-2 " + (passwordsWarning === "" && "d-none")}>{passwordsWarning}</div>
-            <div className={"d-grid p-1"}>
-                <button type={"submit"} name={"signIn"} className={"btn btn-primary"}>Register
+            <div className={"d-grid mb-3 mb-md-1"}>
+                <button type={"submit"} name={"signIn"} className={"btn btn-dark btn-outline-light"}>Register
                 </button>
             </div>
-            <hr/>
-            <div className={"row justify-content-center"}>
-                <div
-                    className={"text-center pb-2 " + (emailWarning != emailAlreadyRegisteredResponseMessage && "d-none")}>
-                    Already have an account? Log in instead.
-                </div>
-                <div className={"d-grid col-8"}>
-                    <button onClick={handleFormChange} type={"button"} className={"btn btn-success"}>Log In
-                    </button>
+            <div className={""}>
+                <div className={"text-white text-center"}>
+                    <p>Already have an account? <span onClick={handleFormChange} className="text-btn">Sign in</span></p>
                 </div>
             </div>
         </form>

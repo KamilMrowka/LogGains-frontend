@@ -2,11 +2,11 @@ import { Chart, LineController, CategoryScale, LinearScale, PointElement, LineEl
 import Navbar from "../components/Navbar.tsx";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import LoadingPage from "./LoadingPage.tsx";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import SaveTodayForm from "../components/SaveTodayForm.tsx";
 import constructData, { graphData } from "../functions/constructData.ts";
+import TodayData from "../components/TodayData.tsx";
+import ThisWeekData from "../components/ThisWeekData.tsx";
 import UpdateTodayForm from "../components/UpdateTodayForm.tsx";
 
 interface Day {
@@ -45,8 +45,9 @@ export interface Today {
 }
 export default function HomePage() {
     const [isLoading, setIsLoading] = useState(true);
-    let formType: "save" | "update" = "save";
+    let formType: "save" | "display" = "save";
     let data: graphData;
+    const [wantsUpdate, setWantsUpdate] = useState(false);
     const [responseData, setResponseData] = useState<HomePageResponse>();
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     Chart.register(LineController, CategoryScale, LinearScale, PointElement, LineElement, Tooltip);
@@ -66,9 +67,11 @@ export default function HomePage() {
         highestWeight = data.highestWeight;
         today = data.today;
         if (today.date === formatedDate) {
-            formType = "update";
+            formType = "display";
+        } else if (wantsUpdate != false) {
+            setWantsUpdate(false);
         }
-    }
+     }
 
 
     useEffect(() => {
@@ -99,7 +102,7 @@ export default function HomePage() {
                             labels: data.dayData.map(row => row.date),
                             datasets: [{
                                 data: data.dayData.map(row => row.weight),
-                                borderColor: 'rgb(76, 187, 23)',
+                                borderColor: 'rgb(00, 191, 100)',
                                 tension: 0.3,
                                 pointRadius: ( responseData?.dayList.length > 1 ) ? 3 : 8,
                                 pointBorderWidth: (responseData.dayList.length > 1 ) ? 1 : 3,
@@ -158,49 +161,49 @@ export default function HomePage() {
         }
     }, [isLoading])
 
+    const onClick = () => {
+        if (wantsUpdate) {
+            setWantsUpdate(false);
+        } else {
+            setWantsUpdate(true);
+        }
+    }
+
+    console.log("formType: " + formType + " wants update: " + wantsUpdate)
+
     
     return (
-        <> 
-            {isLoading ? <AnimatePresence mode="wait"><LoadingPage></LoadingPage></AnimatePresence> :
-                (
-                    <motion.div className={"container-fluid flex-column p-0 align-self-start mb-1"}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 1 }}
-                        exit={{ opacity: 0 }}
-                    >
-                        <Navbar></Navbar>
-                        <div className={"container-fluid d-flex text-white p-4 justify-content-evenly align-self-center align-items-start"}>
-                            <div className="flex-row d-flex container-fluid p-3 justify-conent-evenly row row-cols-2">
-                                <div className={"col-8 text-center"}>
-                                    <div className="pb-3">
-                                        <h1> Your weight this week:</h1>
-                                    </div>
-                                    <canvas ref={chartRef} />
-                                </div>
-                                <div className="vr m-4 text-secondary d-none "></div>
-                                <div className="d-flex flex-column container-fluid justify-content-start align-items-center">
-                                    <h1 className="text-center pb-3">Today:</h1>
-                                   {formType === "save" ? <SaveTodayForm></SaveTodayForm> : 
-                                   <UpdateTodayForm 
-                                        weight={today.weight}
-                                        calories={today.calories}
-                                        date={today.date}
-                                    ></UpdateTodayForm>}
-                                    <div className="col-12 text-secondary m-4">
-                                        <hr/>
-                                    </div>
-                                    <h1 className="text-center pb-3">This week:</h1>
-                                    <div>Median weight: som kg</div>
-                                    <div>Lowest weight: som kg</div>
-                                    <div>Highest weight: som kg</div>
-                                    <div>Average deficit: som kcal</div>
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-                )
-            }
-        </>
+        <div className="d-flex main-container-centered flex-column"> 
+            <Navbar></Navbar>
+            <div className="main-container d-flex flex-column flex-md-row text-white justify-content-between">
+                <main className="graph mt-5 mt-md-0">
+                    <div className="text-center">
+                        <h1>Your weight this week:</h1>
+                    </div>
+                    <canvas ref={chartRef} />
+                    <hr className="my-5 d-md-none"/>
+                </main>
+                <aside className="form-data m-0 d-md-flex flex-column justify-content-between">
+                    <div className="measure-form m-auto m-md-0">
+                        <h1 className="mb-3">Today:</h1>
+                        {formType === "save" && !wantsUpdate && <SaveTodayForm></SaveTodayForm>}
+                        {(formType === "display" && !wantsUpdate) && 
+                            <TodayData 
+                                today={today}
+                                onClickFunction={onClick}
+                            ></TodayData>}
+                        {wantsUpdate && 
+                            <UpdateTodayForm
+                                onClick={onClick}
+                            ></UpdateTodayForm>}
+                        <hr className="my-5 d-md-none"/>
+                    </div>
+                    <div className="data-display mb-5 mb-md-0 m-auto mt-md-4"> 
+                        <h1 className="">This week:</h1>
+                        <ThisWeekData></ThisWeekData>
+                    </div>
+                </aside>
+            </div>
+        </div>
     )
 }

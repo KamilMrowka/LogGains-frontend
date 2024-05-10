@@ -4,33 +4,29 @@
 import LoginForm from "../components/LoginForm.tsx";
 import {useState} from "react";
 import RegisteringForm from "../components/RegisteringForm.tsx";
-import { motion } from "framer-motion";
+import SiteInfo from "../components/SiteInfo.tsx";
 
 export default function LoginPage() {
     const [whichForm, setWhichForm]  = useState("logging");
     return (
-        <motion.div className={"d-flex justify-content-evenly"}
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            transition={{ duration: 1 }}
-            exit={{ opacity: 0 }} 
-        >
-            <div className={"col-4 m-5"}>
-                <div className={"row text-white"}>
-                    <h1>Welcome to LOGgains</h1>
-                    <p>A perfect app if you want to:</p>
-                    <ul>
-                        <li>Save your measurements</li>
-                        <li>Get accurate calculations</li>
-                        <li>Make your fitness data clear and readable</li>
-                        <li>Stay motivated by viewing your progress</li>
-                    </ul>
+        <div className={"main-container main-container-centered d-flex flex-column justify-content-evenly mt-5 mt-md-0 flex-md-row"}>
+            <div className="even-bottom d-flex flex-column justify-content-evenly flex-md-row">
+                <div className={"welcome-text"}>    
+                    <img className={"main-logo"} alt="LOGgains" src="src\assets\LOG.png"></img>
+                    <div className="d-none d-md-block">
+                        <SiteInfo></SiteInfo>
+                    </div>
+                </div>
+                <div className="credentials-form my-5 my-md-0">
+                    {whichForm === "logging" ?
+                        <LoginForm setForm={setWhichForm}></LoginForm> :
+                        <RegisteringForm setForm={setWhichForm}></RegisteringForm>
+                    }
+                </div>
+                <div className="d-md-none">
+                    <SiteInfo></SiteInfo>
                 </div>
             </div>
-            {whichForm === "logging" ?
-                <LoginForm setForm={setWhichForm}></LoginForm> :
-                <RegisteringForm setForm={setWhichForm}></RegisteringForm>
-            }
-        </motion.div>
+        </div>
     );
 }
