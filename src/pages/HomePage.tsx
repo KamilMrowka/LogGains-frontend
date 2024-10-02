@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SaveTodayForm from "../components/SaveTodayForm.tsx";
-import constructData, { graphData } from "../functions/constructData.ts";
 import TodayData from "../components/TodayData.tsx";
 import ThisWeekData from "../components/ThisWeekData.tsx";
 import UpdateTodayForm from "../components/UpdateTodayForm.tsx";
@@ -30,23 +29,16 @@ export interface HomePageResponse {
     week: Week,
     averageCalories: number,
     medianWeight: number,
-    weekDays: string[]
+    weekDays: string[],
+    today: Day,
+    lowestWeight: number,
+    highestWeight: number
+
 }
 
-export interface dayData {
-    date: string,
-    weight: number | null
-}
-
-export interface Today {
-    weight: number | null,
-    calories: number | null,
-    date: string,
-}
 export default function HomePage() {
     const [isLoading, setIsLoading] = useState(true);
     let formType: "save" | "display" = "save";
-    let data: graphData;
     const [wantsUpdate, setWantsUpdate] = useState(false);
     const [responseData, setResponseData] = useState<HomePageResponse>();
     const chartRef = useRef<HTMLCanvasElement | null>(null);
@@ -57,26 +49,22 @@ export default function HomePage() {
     let highBar = 98;
     let medianWeight = 0;
     let averageCalories = 0;
+    let today;
     const navigate = useNavigate();
     const date: Date = new Date();
-    const formatedDate: string = date.getDate() + "." + (date.getMonth() > 8 ? (date.getMonth() + 1) : ("0" + (date.getMonth() + 1)));
-    let today: Today = {
-        date: "",
-        weight: null,
-        calories: null
-    }
+    const formatedDate: string = date.getDate() > 9 ? date.getDate() : ("0" + (date.getDate())) + "." + (date.getMonth() > 8 ? (date.getMonth() + 1) : ("0" + (date.getMonth() + 1)));
+
     if (responseData) {
-        data = constructData(responseData, formatedDate);
-        lowestWeight = data.lowestWeight;
-        highestWeight = data.highestWeight;
+        lowestWeight = responseData.lowestWeight;
+        highestWeight = responseData.highestWeight;
         medianWeight = responseData.medianWeight;
         averageCalories = responseData.averageCalories;
-        today = data.today;
-        console.log("today: ", today.date, " formated date: ", formatedDate);
-        if (today.date === formatedDate) {
-            formType = "display";
-        } else if (wantsUpdate != false) {
-            setWantsUpdate(false);
+        today = responseData.today;
+        if (today != null) {
+            console.log(formatedDate, today.date)
+            if (today.date === formatedDate) {
+                formType = "display";
+            }
         }
     }
 
@@ -116,9 +104,9 @@ export default function HomePage() {
                     {
                         type: "line",
                         data: {
-                            labels: data.dayData.map(row => row.date),
+                            labels: responseData.weekDays.map(row => row),
                             datasets: [{
-                                data: data.dayData.map(row => row.weight),
+                                data: responseData.dayList.map(row => row.weightMeasurement),
                                 borderColor: 'rgb(00, 191, 100)',
                                 tension: 0.3,
                                 pointRadius: ( responseData?.dayList.length > 1 ) ? 3 : 8,
