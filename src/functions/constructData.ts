@@ -12,8 +12,8 @@ export default function constructData({ dayList, weekDays }: HomePageResponse, t
     let dayData: dayData[] = [];
     let counter = 0;
     let dayListLength = dayList.length;
-    let lowestWeight: number = 50;
-    let highestWeight: number = 98;
+    let lowestWeight: number = 0;
+    let highestWeight: number = 0;
     let today: Today = {date: "", weight: 0, calories: 0}
 
     if (dayListLength > 0) {
@@ -42,7 +42,7 @@ export default function constructData({ dayList, weekDays }: HomePageResponse, t
                     weight: (weightMeasurement != 0 ? weightMeasurement : null)
                 }
 
-                if (day.date === todayDate && day.weight != null) {
+                if (day.date === todayDate) {
                     today = {
                         date: day.date,
                         weight: day.weight,

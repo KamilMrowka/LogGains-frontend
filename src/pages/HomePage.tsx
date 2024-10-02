@@ -51,11 +51,15 @@ export default function HomePage() {
     const [responseData, setResponseData] = useState<HomePageResponse>();
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     Chart.register(LineController, CategoryScale, LinearScale, PointElement, LineElement, Tooltip);
-    let lowestWeight: number;
-    let highestWeight: number;
+    let lowestWeight = 0;
+    let highestWeight = 0;
+    let lowBar = 50;
+    let highBar = 98;
+    let medianWeight = 0;
+    let averageCalories = 0;
     const navigate = useNavigate();
     const date: Date = new Date();
-    const formatedDate: string = date.getDate() + "." + (date.getMonth() > 9 ? (date.getMonth() + 1) : ("0" + (date.getMonth() + 1)));
+    const formatedDate: string = date.getDate() + "." + (date.getMonth() > 8 ? (date.getMonth() + 1) : ("0" + (date.getMonth() + 1)));
     let today: Today = {
         date: "",
         weight: null,
@@ -65,13 +69,16 @@ export default function HomePage() {
         data = constructData(responseData, formatedDate);
         lowestWeight = data.lowestWeight;
         highestWeight = data.highestWeight;
+        medianWeight = responseData.medianWeight;
+        averageCalories = responseData.averageCalories;
         today = data.today;
+        console.log("today: ", today.date, " formated date: ", formatedDate);
         if (today.date === formatedDate) {
             formType = "display";
         } else if (wantsUpdate != false) {
             setWantsUpdate(false);
         }
-     }
+    }
 
 
     useEffect(() => {
@@ -92,6 +99,16 @@ export default function HomePage() {
     }, [])
 
     useEffect(() => {
+
+        if (lowestWeight != 0) {
+            lowBar = lowestWeight;
+        }
+
+        if (highestWeight != 0) {
+            highBar = highestWeight;
+        }
+
+
         if (chartRef.current && responseData) {
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
@@ -149,8 +166,8 @@ export default function HomePage() {
                                             return value + " kg";
                                         },
                                     },
-                                    min: Math.ceil(lowestWeight - lowestWeight * 0.02),
-                                    max: Math.ceil(highestWeight + highestWeight * 0.02),
+                                    min: Math.ceil(lowBar - (lowBar * 0.02 + 20 / lowBar)),
+                                    max: Math.ceil(highBar + (highBar * 0.02 + 20 / highBar)),
                                     beginAtZero: false,
                                 },
                             },
@@ -169,9 +186,6 @@ export default function HomePage() {
         }
     }
 
-    console.log("formType: " + formType + " wants update: " + wantsUpdate)
-
-    
     return (
         <div className="d-flex main-container-centered flex-column"> 
             <Navbar></Navbar>
@@ -185,7 +199,13 @@ export default function HomePage() {
                 </main>
                 <aside className="form-data m-0 d-md-flex flex-column justify-content-between">
                     <div className="measure-form m-auto m-md-0">
-                        <h1 className="mb-3">Today:</h1>
+                        <div className="d-flex justify-content-between close-update-row">
+                            <h1 className="">Today:</h1>
+                            {
+                                wantsUpdate &&
+                                <button onClick={onClick} className="btn p-0 m-0"><i className="bi bi-x text-danger me-2" style={{fontSize: "2rem"}}></i></button>
+                            }
+                        </div>
                         {formType === "save" && !wantsUpdate && <SaveTodayForm></SaveTodayForm>}
                         {(formType === "display" && !wantsUpdate) && 
                             <TodayData 
@@ -194,13 +214,18 @@ export default function HomePage() {
                             ></TodayData>}
                         {wantsUpdate && 
                             <UpdateTodayForm
-                                onClick={onClick}
+                                today={today} 
                             ></UpdateTodayForm>}
                         <hr className="my-5 d-md-none"/>
                     </div>
                     <div className="data-display mb-5 mb-md-0 m-auto mt-md-4"> 
                         <h1 className="">This week:</h1>
-                        <ThisWeekData></ThisWeekData>
+                        <ThisWeekData
+                            medianWeight={ medianWeight }
+                            averageKcal={ averageCalories }
+                            lowestWeight={ lowestWeight }
+                            highestWeight={ highestWeight }
+                        ></ThisWeekData>
                     </div>
                 </aside>
             </div>

@@ -4,27 +4,40 @@ export default function Navbar() {
     
     const navigate = useNavigate();
 
-    const handleClick = () => {
+    const handleLogOut = () => {
         localStorage.removeItem('token');
         navigate('/login');
     }
-    
+
+    const handleToCalendar = () => {
+        navigate("/calendar");
+    }
+
+    const handleToComparator = () => {
+        navigate("/compare");
+    }
+
+    const handleToHome = () => {
+        navigate("/");
+    }
+
+   
     return (
         <>
-            <header className={"nav bg-black container-fluid"}>
+            <header className={"bg-black d-flex container-fluid"}>
                 <nav className="main-container d-flex align-self-start justify-content-between align-items-center text-white">
-                    <div className="nav-logo my-2">
-                        <img src="/src/assets/bars-graph-svgrepo-com.svg" alt="LOGgains logo" width="50"
-                             height="50"></img>
+                    <div onClick={handleToHome} className="nav-logo navbar-img my-4">
+                        <img src="src\assets\LOG.png">
+                        </img>
+                    </div>
+                    <div onClick={handleToCalendar} className="text-btn">
+                        Gains Calendar
+                    </div>
+                    <div onClick={handleToComparator} className="text-btn">
+                        Comparator
                     </div>
                     <div className="">
-                        Gains Center
-                    </div>
-                    <div className="">
-                        Data Center
-                    </div>
-                    <div className="">
-                        <button onClick={handleClick} className={"btn btn-outline-light text-white"}>Log out</button>
+                        <button onClick={handleLogOut} className={"btn btn-outline-light text-white"}>Log out</button>
                     </div>
                 </nav>
             </header>
