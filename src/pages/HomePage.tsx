@@ -8,32 +8,22 @@ import TodayData from "../components/TodayData.tsx";
 import ThisWeekData from "../components/ThisWeekData.tsx";
 import UpdateTodayForm from "../components/UpdateTodayForm.tsx";
 
-interface Day {
-    dayId: number,
-    userId: number,
-    weekId: number,
-    monthId: number,
+interface GraphData {
     date: string,
-    caloriesConsumed: number,
-    weightMeasurement: number 
+    weight: number,
+    calories: number
 }
 
-interface Week {
-    id: number, 
-    firstDay: string,
-    lastDay: string
-}
-
-export interface HomePageResponse {
-    dayList: Day[],
-    week: Week,
-    averageCalories: number,
+interface Analysis {
     medianWeight: number,
-    weekDays: string[],
-    today: Day,
+    averageCalories: number,
     lowestWeight: number,
     highestWeight: number
+}
 
+interface HomePageResponse {
+    graphData: GraphData[],
+    weekAnalysis: Analysis
 }
 
 export default function HomePage() {
@@ -49,23 +39,29 @@ export default function HomePage() {
     let highBar = 98;
     let medianWeight = 0;
     let averageCalories = 0;
-    let today;
     const navigate = useNavigate();
     const date: Date = new Date();
-    const formatedDate: string = date.getDate() > 9 ? date.getDate() : ("0" + (date.getDate())) + "." + (date.getMonth() > 8 ? (date.getMonth() + 1) : ("0" + (date.getMonth() + 1)));
+    const formatedDate: string = "" + (date.getDate() > 9 ? date.getDate() : ("0" + (date.getDate())) + "." + (date.getMonth() > 8 ? (date.getMonth() + 1) : ("0" + (date.getMonth() + 1))));
+    let today: GraphData = {calories: 0, weight: 0, date: formatedDate};
 
-    if (responseData) {
-        lowestWeight = responseData.lowestWeight;
-        highestWeight = responseData.highestWeight;
-        medianWeight = responseData.medianWeight;
-        averageCalories = responseData.averageCalories;
-        today = responseData.today;
-        if (today != null) {
-            console.log(formatedDate, today.date)
-            if (today.date === formatedDate) {
-                formType = "display";
+    let dayNum = 0
+
+    responseData?.graphData.forEach((g) => {
+        if (g.weight != 0) {
+            dayNum++;
+            if (g.date === formatedDate) {
+                today = g;
+                formType = 'display';
             }
         }
+
+    })
+
+    if (responseData) {
+        lowestWeight = responseData.weekAnalysis.lowestWeight;
+        highestWeight = responseData.weekAnalysis.highestWeight;
+        medianWeight = responseData.weekAnalysis.medianWeight;
+        averageCalories = responseData.weekAnalysis.averageCalories;
     }
 
 
@@ -104,13 +100,13 @@ export default function HomePage() {
                     {
                         type: "line",
                         data: {
-                            labels: responseData.weekDays.map(row => row),
+                            labels: responseData.graphData.map(row => row.date),
                             datasets: [{
-                                data: responseData.dayList.map(row => row.weightMeasurement),
+                                data: responseData.graphData.map(row => row.weight != 0 ? row.weight : null),
                                 borderColor: 'rgb(00, 191, 100)',
                                 tension: 0.3,
-                                pointRadius: ( responseData?.dayList.length > 1 ) ? 3 : 8,
-                                pointBorderWidth: (responseData.dayList.length > 1 ) ? 1 : 3,
+                                pointRadius: ( dayNum > 1 ) ? 3 : 8,
+                                pointBorderWidth: ( dayNum > 1 ) ? 1 : 3,
                             }]
                         },
                         options: {
@@ -195,7 +191,7 @@ export default function HomePage() {
                             }
                         </div>
                         {formType === "save" && !wantsUpdate && <SaveTodayForm></SaveTodayForm>}
-                        {(formType === "display" && !wantsUpdate) && 
+                        {!wantsUpdate && 
                             <TodayData 
                                 today={today}
                                 onClickFunction={onClick}
