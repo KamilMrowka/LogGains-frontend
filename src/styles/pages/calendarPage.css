@@ -1,0 +1,40 @@
+.days {
+    display: flex;
+}
+
+.day {
+    width: 14.29%;
+    font-size: 1.5rem;
+    border: 1px solid white;
+}
+
+.day-today {
+    background-color: #00BF64;
+}
+
+.day-proper:hover {
+    color: #00BF64;
+    cursor: pointer;
+}
+
+.day-today:hover {
+    background-color:transparent;
+}
+
+
+.calendar-arrow {
+    color: white;
+}
+
+.calendar-arrow:hover {
+    cursor: pointer;
+    color: #00BF64;
+}
+
+.cancel-update:hover {
+    cursor: pointer;
+}
+
+.day-has-data {
+    border-bottom: 1px #00BF64 solid;
+}

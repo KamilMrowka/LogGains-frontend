@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
 import axios from "axios";
-import { Today } from "../pages/HomePage";
+import { GraphData } from "../pages/HomePage";
 
 interface updateRequest {
     date: string,
@@ -9,10 +9,14 @@ interface updateRequest {
 }
 
 interface Props {
-    today: Today
+    today: GraphData
+    // F: YYYY-MM-DD
+    customDate?: string
 }
 
-export default function( { today }: Props ) {
+
+
+export default function( { today, customDate }: Props ) {
     const weightRef = useRef<HTMLInputElement>(null);
     const kcalRef = useRef<HTMLInputElement>(null);
     const [isEmptyOrSame, setIsEmptyOrSame] = useState(true);
@@ -41,6 +45,12 @@ export default function( { today }: Props ) {
             caloriesConsumed: calories,
             weightMeasurement: weight,
         }
+
+        if (customDate) {
+            request.date = customDate;
+        }
+
+
         return request;
         } else {
             return {
@@ -65,7 +75,11 @@ export default function( { today }: Props ) {
 
     const handleChange = () => {
         if (weightRef.current != null && kcalRef.current != null) {
-            if (weightRef.current.value == "" && kcalRef.current.value == "") {
+            if ((weightRef.current.value == "" && kcalRef.current.value == "") ||
+                (weightRef.current.value == "" && kcalRef.current.value.charAt(0) === "0") ||
+                (weightRef.current.value.charAt(0) == "0" && kcalRef.current.value.charAt(0) === "0") ||
+                (weightRef.current.value.charAt(0) == "0" && kcalRef.current.value === "")
+            ) {
                 setIsEmptyOrSame(true);
             } else {
                 setIsEmptyOrSame(false);
@@ -75,7 +89,7 @@ export default function( { today }: Props ) {
 
 
     return (
-        <div className="save-today mt-3">
+        <div className="save-today">
             <form onSubmit={handleSubmit} className="">
                 <div className="input-group mb-2">
                     <input onChange={handleChange} type="number" ref={weightRef} min={0} max={500} step={0.1} placeholder="Weight" className="placeholder-light bg-dark text-white form-control"></input>

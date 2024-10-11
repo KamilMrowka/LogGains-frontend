@@ -1,10 +1,17 @@
-
+html {
+    font-size: x-small;
+}
 body {
     background: #242424 !important;
 }
 
 img {
     width: 100%;
+}
+
+.green-theme {
+   color: #00BF64;
+   outline-color: #00BF64;
 }
 
 
@@ -78,7 +85,11 @@ img {
     font-size: 2rem;
 }
 
-
+.calendar {
+    min-width: 300px;
+    width: 100%;
+    margin: auto;
+}
 
 .text-btn:hover {
     cursor: pointer;
@@ -94,16 +105,65 @@ img {
     color: white !important;
 }
 .btn-update {
+    width: 85%;
+}
+
+.btn-delete {
+    width: 15%;
+}
+
+.aside-calendar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+}
+
+.calendar-page {
+    width: 90%;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.main-calendar {
     width: 100%;
+    margin-bottom: 5rem;
 }
 
 @media (min-width: 768px) {
     .graph {
         width: 70%;
+    } 
+
+    .aside-calendar {
+        margin-top: 1rem;
+        width: 25%;
+        justify-content: start;
+        align-items: center;
+    }
+
+    .main-calendar {
+        width: 60%;
+        margin-bottom: 0;
+    }
+
+    .calendar {
+        min-width: 500px;
+        margin: 0;
+    }
+
+    html {
+        font-size:medium;
+    }
+
+    .calendar-page {
+        width: 90%;
+        justify-content: space-between;
+        flex-direction: row;
     }
 
     .save-today {
-        width: 70%;
+        width: 100%;
     }
 
     .main-logo {
@@ -111,7 +171,7 @@ img {
     }
 
     .form-data {
-        width: 25%;
+        width: 23%;
     }
 
     .measure-form {
@@ -128,11 +188,14 @@ img {
 
     .main-container-centered {
         height: 100vh;
+    }
+
+    .login-page-main {
         align-items: center;
     }
 
     .credentials-form {
-        align-self: self-end;
+        align-self: self-center;
         width: 25%;
     }
 

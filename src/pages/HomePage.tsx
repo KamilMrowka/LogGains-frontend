@@ -8,13 +8,13 @@ import TodayData from "../components/TodayData.tsx";
 import ThisWeekData from "../components/ThisWeekData.tsx";
 import UpdateTodayForm from "../components/UpdateTodayForm.tsx";
 
-interface GraphData {
+export interface GraphData {
     date: string,
     weight: number,
     calories: number
 }
 
-interface Analysis {
+export interface Analysis {
     medianWeight: number,
     averageCalories: number,
     lowestWeight: number,
@@ -28,9 +28,10 @@ interface HomePageResponse {
 
 export default function HomePage() {
     const [isLoading, setIsLoading] = useState(true);
-    let formType: "save" | "display" = "save";
+    const [formType, setFormType] = useState<"save" | "display">("save");
     const [wantsUpdate, setWantsUpdate] = useState(false);
     const [responseData, setResponseData] = useState<HomePageResponse>();
+    const [onClickTrigger, setOnClickTrigger] = useState(false);
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     Chart.register(LineController, CategoryScale, LinearScale, PointElement, LineElement, Tooltip);
     let lowestWeight = 0;
@@ -41,8 +42,9 @@ export default function HomePage() {
     let averageCalories = 0;
     const navigate = useNavigate();
     const date: Date = new Date();
-    const formatedDate: string = "" + (date.getDate() > 9 ? date.getDate() : ("0" + (date.getDate())) + "." + (date.getMonth() > 8 ? (date.getMonth() + 1) : ("0" + (date.getMonth() + 1))));
+    const formatedDate: string = "" + (date.getDate() > 9 ? date.getDate() : ("0" + (date.getDate()))) + "." + (date.getMonth() > 8 ? (date.getMonth() + 1) : ("0" + (date.getMonth() + 1)));
     let today: GraphData = {calories: 0, weight: 0, date: formatedDate};
+    const todayRequestDate: string = date.getFullYear() + "-" + (date.getMonth() > 8 ? (date.getMonth() + 1) : ("0" + (date.getMonth() + 1))) + "-" + (date.getDate() > 9 ? date.getDate() : ("0" + (date.getDate()))) 
 
     let dayNum = 0
 
@@ -51,7 +53,9 @@ export default function HomePage() {
             dayNum++;
             if (g.date === formatedDate) {
                 today = g;
-                formType = 'display';
+                if (formType != "display") {
+                    setFormType("display");
+                }
             }
         }
 
@@ -68,19 +72,19 @@ export default function HomePage() {
     useEffect(() => {
         const token = 'Bearer ' + localStorage.getItem('420token');
         const getHomePage = async () => {
-            console.log(localStorage.getItem("420token"));
             await axios.get("http://localhost:8080/api/v1/pages/homePage",
                 {headers: {"Authorization": token}})
             .then(response => {
                 console.log(response.data);
                 setResponseData(response.data);
                 setIsLoading(false);
+                setOnClickTrigger(false);
             }).catch(() => {
                 navigate("/login");
             })
         }
         getHomePage();
-    }, [])
+    }, [onClickTrigger])
 
     useEffect(() => {
 
@@ -178,21 +182,25 @@ export default function HomePage() {
                     <div className="text-center">
                         <h1>Your weight this week:</h1>
                     </div>
+                    // THE GRAPH's Canvas element
                     <canvas ref={chartRef} />
+                    
                     <hr className="my-5 d-md-none"/>
                 </main>
                 <aside className="form-data m-0 d-md-flex flex-column justify-content-between">
                     <div className="measure-form m-auto m-md-0">
-                        <div className="d-flex justify-content-between close-update-row">
+                        <div className="d-flex justify-content-between">
                             <h1 className="">Today:</h1>
                             {
                                 wantsUpdate &&
                                 <button onClick={onClick} className="btn p-0 m-0"><i className="bi bi-x text-danger me-2" style={{fontSize: "2rem"}}></i></button>
                             }
                         </div>
-                        {formType === "save" && !wantsUpdate && <SaveTodayForm></SaveTodayForm>}
-                        {!wantsUpdate && 
+                        {(formType === "save" && !wantsUpdate) && <SaveTodayForm></SaveTodayForm>}
+                        {(formType === "display" && !wantsUpdate) && 
                             <TodayData 
+                                setOnClickTrigger={setOnClickTrigger}
+                                customDeleteDate={todayRequestDate}
                                 today={today}
                                 onClickFunction={onClick}
                             ></TodayData>}

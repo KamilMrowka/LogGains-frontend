@@ -5,9 +5,17 @@ import '../styles/number.css';
 export interface dayMeasurements {
     caloriesConsumed: number,
     weightMeasurement: number,
+    // F: YYYY-MM-DD
+    date?: string
+
 }
 
-export default function MeasurementsForm () {
+interface Props {
+    // F: YYYY-MM-DD
+    date?: string
+}
+
+export default function MeasurementsForm ( { date }: Props ) {
 
     const weightRef = useRef<HTMLInputElement>(null);
     const caloriesRef = useRef<HTMLInputElement>(null);
@@ -27,10 +35,16 @@ export default function MeasurementsForm () {
         } else {
             calories = 0;
         }
-        const request: dayMeasurements = {
+
+        let request: dayMeasurements = {
             caloriesConsumed: calories,
             weightMeasurement: weight,
         }
+
+        if (date) {
+            request.date = date;
+        }
+        
         return request;
         } else {
             return {
@@ -55,7 +69,12 @@ export default function MeasurementsForm () {
 
     const handleChange = () => {
         if (weightRef.current != null && caloriesRef.current != null) {
-            if (weightRef.current.value == "" && caloriesRef.current.value == "") {
+            if (
+                (weightRef.current.value == "" && caloriesRef.current.value == "") || 
+                (weightRef.current.value == "" && caloriesRef.current.value.charAt(0) === "0") ||
+                (weightRef.current.value.charAt(0) == "0" && caloriesRef.current.value.charAt(0) === "0") ||
+                (weightRef.current.value.charAt(0) == "0" && caloriesRef.current.value === "")
+            ){
                 setEmpty(true);
             } else {
                 setEmpty(false);

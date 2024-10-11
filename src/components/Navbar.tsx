@@ -24,7 +24,7 @@ export default function Navbar() {
    
     return (
         <>
-            <header className={"bg-black d-flex container-fluid"}>
+            <header className={"bg-black d-flex"}>
                 <nav className="main-container d-flex align-self-start justify-content-between align-items-center text-white">
                     <div onClick={handleToHome} className="nav-logo navbar-img my-4">
                         <img src="src\assets\LOG.png">
