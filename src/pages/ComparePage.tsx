@@ -138,7 +138,7 @@ export default function ComparePage() {
             <Navbar></Navbar>
             <main>
                 <div className="d-flex align-items-start justify-content-xxl-between flex-column flex-xxl-row text-white main-container mt-5 mb-5">
-                    <h1 className="compare-heading">Select a date for analisys <span className="my-green">or</span> select two for comparison:</h1>
+                    <h1 className="compare-heading">Select a date for analysis <span className="my-green">or</span> select two for comparison:</h1>
                     <form onSubmit={onSubmit} className="d-flex justify-content-between">
                         <input type="date" onChange={(e) => setFirstDate(e.target.value)} value={firstDate} placeholder="First day" className="bg-dark form-control text-white datepicker me-5"></input>
                         <input type="date" onChange={(e) => setSecondDate(e.target.value)} value={secondDate}placeholder="Second day" className="bg-dark form-control text-white datepicker me-5"></input>

@@ -102,18 +102,47 @@ export default function compareGraphSetter( { periodOneDataSet, periodTwoDataSet
         }
     }
 
-    const lowestY = getDataset(periodOneDataSet).reduce((min, current) => {
+
+    const lowestYPeriodOne = getDataset(periodOneDataSet).reduce((min, current) => {
         if (current == null) return min;
         const lowest = Math.min(min ? min : 999, current ? current : 0);
         return lowest;
     });
 
+    let lowestYPeriodTwo;
 
-    const highestY = getDataset(periodOneDataSet).reduce((max, current) => {
+    if (periodTwoDataSet) {
+        lowestYPeriodTwo = getDataset(periodTwoDataSet).reduce((min, current) => {
+            if (current == null) return min;
+            const lowest = Math.min(min ? min : 999, current ? current : 0);
+            return lowest;
+        });
+    }
+
+    const lowestY = Math.round(Math.min(lowestYPeriodOne ? lowestYPeriodOne : Infinity, lowestYPeriodTwo ? lowestYPeriodTwo : Infinity) * 100 * 0.85) / 100;
+
+
+
+
+
+
+    const highestYPeriodOne = getDataset(periodOneDataSet).reduce((max, current) => {
         if (current == null) return max;
         const highest = Math.max(max ? max : 0, current ? current : 0);
         return Math.floor(highest + highest * 0.05);  
     });
+
+    let highestYPeriodTwo;
+
+    if (periodTwoDataSet) {
+        highestYPeriodTwo = getDataset(periodTwoDataSet).reduce((max, current) => {
+            if (current == null) return max;
+            const highest = Math.max(max ? max : 0, current ? current : 0);
+            return Math.floor(highest + highest * 0.05);  
+        });
+    }
+
+    const highestY = Math.round((Math.max(highestYPeriodOne ? highestYPeriodOne : 0, highestYPeriodTwo ? highestYPeriodTwo : 0)) * 100) / 100;
 
     if (periodOneDataSet && !periodTwoDataSet) {
         if (refObject.current) {
@@ -185,8 +214,8 @@ export default function compareGraphSetter( { periodOneDataSet, periodTwoDataSet
                                             return value + ((getDatasetsType() === "weight") ? "kg" : "kcal");
                                         },
                                     },
-                                    min: lowestY ? (lowestY - 10 >= 0 && lowestY != 999 ? lowestY - 10 : 0) : 0,
-                                    max: highestY ? highestY + 10 : 100,
+                                    min: lowestY,
+                                    max: highestY,
                                     beginAtZero: false,
                                 },
                             },
@@ -270,8 +299,8 @@ export default function compareGraphSetter( { periodOneDataSet, periodTwoDataSet
                                             return value + ((getDatasetsType() === "weight") ? "kg" : "kcal");
                                         },
                                     },
-                                    min: lowestY ? (lowestY - 10 >= 0 && lowestY != 999 ? lowestY - 10 : 0) : 0,
-                                    max: highestY ? highestY + 10 : 100,
+                                    min: lowestY,
+                                    max: highestY,
                                     beginAtZero: false,
                                 },
                             },
