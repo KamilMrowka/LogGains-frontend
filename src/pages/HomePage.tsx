@@ -45,6 +45,7 @@ export default function HomePage() {
     const formatedDate: string = "" + (date.getDate() > 9 ? date.getDate() : ("0" + (date.getDate()))) + "." + (date.getMonth() > 8 ? (date.getMonth() + 1) : ("0" + (date.getMonth() + 1)));
     let today: GraphData = {calories: 0, weight: 0, date: formatedDate};
     const todayRequestDate: string = date.getFullYear() + "-" + (date.getMonth() > 8 ? (date.getMonth() + 1) : ("0" + (date.getMonth() + 1))) + "-" + (date.getDate() > 9 ? date.getDate() : ("0" + (date.getDate()))) 
+    const chartRefVariable = useRef<Chart<"line", (number | null)[], string> | null>(null);
 
     let dayNum = 0
 
@@ -98,9 +99,12 @@ export default function HomePage() {
 
 
         if (chartRef.current && responseData) {
+            if (chartRefVariable.current) {
+                chartRefVariable.current.destroy();
+            }
             const ctx = chartRef.current.getContext('2d');
             if (ctx) {
-                new Chart(ctx, 
+                chartRefVariable.current = new Chart(ctx, 
                     {
                         type: "line",
                         data: {
@@ -182,7 +186,9 @@ export default function HomePage() {
                     <div className="text-center">
                         <h1>Your weight this week:</h1>
                     </div>
-                    // THE GRAPH's Canvas element
+
+                    {/* THE GRAPH'S Canvas element */}
+
                     <canvas ref={chartRef} />
                     
                     <hr className="my-5 d-md-none"/>

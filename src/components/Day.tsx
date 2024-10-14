@@ -18,7 +18,6 @@ export default function Day ({ day, currentMonth, setChosenDay, chosenDay } : Pr
             }
         }
     }
-    console.log(day.date, today)
 
     return (
         // -99 kcal means day names row(top row: mon, tue, wed...)
@@ -28,7 +27,7 @@ export default function Day ({ day, currentMonth, setChosenDay, chosenDay } : Pr
             ((currentMonth && today === day.date) ? " day-today" : "") + 
             (day.calories != -98 && day.calories != -99 ? " day-proper" : "")
         }>
-            <text className={(day.calories > 0 || day.weight > 0 ? " day-has-data" : "")}>{day.date}</text>
+            <span className={(day.calories > 0 || day.weight > 0 ? " day-has-data" : "")}>{day.date}</span>
         </div>
     )
 }

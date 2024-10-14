@@ -14,6 +14,13 @@ img {
    outline-color: #00BF64;
 }
 
+.my-green {
+   color: #00BF64;
+}
+
+.my-purple {
+    color: #A020F0;
+}
 
 /* LAYOUT */
 
@@ -24,6 +31,19 @@ img {
 .navbar-img {
     width: 13%;
     cursor: pointer;
+}
+
+.comparison-graph {
+    width: 100%;
+    margin-bottom: 2em;
+}
+
+.graph-analysis-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 10rem;
 }
 
 .main-container {
@@ -170,6 +190,11 @@ img {
         margin-top: 0rem;
     }
 
+    .comparison-graph {
+        margin-right: 5em;
+        margin-bottom: 0em;
+    }
+
     .form-data {
         width: 23%;
     }
@@ -211,5 +236,17 @@ img {
     .site-info-title {
         text-align: start;
         margin-bottom: 0;
+    }
+
+    .comparison-graph {
+        width: 70%;
+    }
+
+    .graph-analysis-wrap {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 10rem;
     }
 }

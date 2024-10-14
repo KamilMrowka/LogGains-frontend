@@ -45,7 +45,6 @@ export default function CalendarPage() {
                 {headers: {"Authorization": token}})
             .then(response => {
                 setResponseData(response.data);
-                console.log(response.data);
                 if (showWrongDate) {
                     setShowWrongDate(false);
                 }
