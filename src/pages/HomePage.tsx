@@ -7,6 +7,7 @@ import SaveTodayForm from "../components/SaveTodayForm.tsx";
 import TodayData from "../components/TodayData.tsx";
 import ThisWeekData from "../components/ThisWeekData.tsx";
 import UpdateTodayForm from "../components/UpdateTodayForm.tsx";
+import {getStoreValue, storeKeys} from "../functions/store.ts";
 
 export interface GraphData {
     date: string,
@@ -73,10 +74,9 @@ export default function HomePage() {
     useEffect(() => {
         const token = 'Bearer ' + localStorage.getItem('420token');
         const getHomePage = async () => {
-            await axios.get("http://localhost:8080/api/v1/pages/homePage",
+            await axios.get(getStoreValue(storeKeys.baseUrl) + "/pages/homePage",
                 {headers: {"Authorization": token}})
             .then(response => {
-                console.log(response.data);
                 setResponseData(response.data);
                 setIsLoading(false);
                 setOnClickTrigger(false);

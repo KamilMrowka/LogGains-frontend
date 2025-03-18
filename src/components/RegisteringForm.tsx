@@ -1,6 +1,7 @@
 import React, {ChangeEvent, useRef, useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {getStoreValue, storeKeys} from "../functions/store.ts";
 
 interface registerRequest {
     username: string,
@@ -59,7 +60,7 @@ export default function RegisteringForm ({ setForm }: Props) {
         }
 
         const axiosRequest = async () => {
-            await axios.post('http://localhost:8080/api/v1/auth/register', request)
+            await axios.post(getStoreValue(storeKeys.baseUrl) + "/auth/register", request)
             .then(response => {
                 if (response.status === 200) {
                     localStorage.setItem('420token', response.data['token']);

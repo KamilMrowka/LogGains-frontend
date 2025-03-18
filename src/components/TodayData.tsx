@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { GraphData } from "../pages/HomePage"
 import axios from "axios";
+import {getStoreValue, storeKeys} from "../functions/store.ts";
 interface Props {
     today: GraphData,
     onClickFunction: React.MouseEventHandler<HTMLButtonElement>,
@@ -23,7 +24,7 @@ export default function( { today, onClickFunction, customDeleteDate, setOnClickT
 
     const onDelete = async () => {
 
-        await axios.delete("http://localhost:8080/api/v1/day", {
+        await axios.delete(getStoreValue(storeKeys.baseUrl) + "/day", {
             data: customDeleteDate,
             headers: {
                     "Authorization": "Bearer " + localStorage.getItem('420token')}

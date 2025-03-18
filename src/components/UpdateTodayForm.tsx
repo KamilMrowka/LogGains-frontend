@@ -1,6 +1,7 @@
 import { useRef, useState } from "react"
 import axios from "axios";
 import { GraphData } from "../pages/HomePage";
+import {getStoreValue, storeKeys} from "../functions/store.ts";
 
 interface updateRequest {
     date: string,
@@ -65,7 +66,7 @@ export default function( { today, customDate }: Props ) {
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault;
         const request: updateRequest = formRequest();
-        await axios.put("http://localhost:8080/api/v1/day", request, {headers: {"Authorization": "Bearer " + localStorage.getItem('420token')}})
+        await axios.put(getStoreValue(storeKeys.baseUrl) + "/day", request, {headers: {"Authorization": "Bearer " + localStorage.getItem('420token')}})
         .then(() => {
         })
         .catch(() => {

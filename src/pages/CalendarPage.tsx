@@ -10,6 +10,7 @@ import MeasurementsForm from "../components/SaveTodayForm";
 import TodayData from "../components/TodayData";
 import UpdateTodayForm from "../components/UpdateTodayForm";
 import AnalysisElement from "../components/AnalysisElement";
+import {getStoreValue, storeKeys} from "../functions/store.ts";
 
 export default function CalendarPage() {
 
@@ -41,7 +42,7 @@ export default function CalendarPage() {
     useEffect(() => {
         const token = 'Bearer ' + localStorage.getItem('420token');
         const getHomePage = async () => {
-            await axios.get("http://localhost:8080/api/v1/pages/calendarPage?date="+month,
+            await axios.get(getStoreValue(storeKeys.baseUrl) + "/pages/calendarPage?date="+month,
                 {headers: {"Authorization": token}})
             .then(response => {
                 setResponseData(response.data);

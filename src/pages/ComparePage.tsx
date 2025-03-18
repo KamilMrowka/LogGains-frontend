@@ -6,6 +6,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import compareGraphSetter from "../functions/CompareGraphSetter";
 import ComparisonElement from "../components/ComparisonElement";
+import {getStoreValue, storeKeys} from "../functions/store.ts";
 
 
 //     private List<GraphData> weekOne;
@@ -63,14 +64,12 @@ export default function ComparePage() {
         event.preventDefault();
         const token = 'Bearer ' + localStorage.getItem('420token');
         const getComparePage = async () => {
-            await axios.get("http://localhost:8080/api/v1/pages/comparePage?date1="+firstDate+"&date2="+secondDate,
+            await axios.get(getStoreValue(storeKeys.baseUrl) + "/pages/comparePage?date1="+firstDate+"&date2="+secondDate,
                 {headers: {"Authorization": token}})
             .then(response => {
-                console.log(response.data);
                 sessionStorage.setItem(compObjString, JSON.stringify(response.data));
                 setResponse(response.data);
             }).catch(error => {
-                console.log(error);
                 navigate("/login");
             })
         }

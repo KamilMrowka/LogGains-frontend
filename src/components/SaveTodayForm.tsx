@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useRef, useState } from "react";
 import '../styles/number.css';
+import {getStoreValue, storeKeys} from "../functions/store.ts";
 
 export interface dayMeasurements {
     caloriesConsumed: number,
@@ -58,7 +59,7 @@ export default function MeasurementsForm ( { date }: Props ) {
     const handleSaveSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault;
         const request: dayMeasurements = formRequest();
-        await axios.post("http://localhost:8080/api/v1/day", request, {headers: {"Authorization": "Bearer " + localStorage.getItem('420token')}})
+        await axios.post(getStoreValue(storeKeys.baseUrl) + "/day", request, {headers: {"Authorization": "Bearer " + localStorage.getItem('420token')}})
         .then(() => {
 
         })

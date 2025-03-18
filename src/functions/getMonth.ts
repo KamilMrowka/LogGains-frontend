@@ -1,30 +1,28 @@
 interface Props {
-    currentMonth?: String,
+    currentMonth?: string,
     plusMonths?: number,
 }
 
 export default function getMonth({ currentMonth, plusMonths }: Props): string {
+    if (currentMonth && plusMonths !== undefined) {
+        const [monthStr, yearStr] = currentMonth.split("-");
+        const monthInt: number = parseInt(monthStr);
+        const yearInt: number = parseInt(yearStr);
 
-    if (currentMonth && plusMonths) {
-        const monthInt: number = parseInt(currentMonth.split("-")[0]);
-        const yearInt: number = parseInt(currentMonth.split("-")[1]);
+        let newMonth = monthInt + plusMonths;
+        let newYear = yearInt;
 
-        if (plusMonths + monthInt > 12 && plusMonths + monthInt > 1) {
-            const newMonth = plusMonths + monthInt - 12;
-            const newYear = yearInt + 1;
-
-            return (newMonth > 9 ? newMonth : "0" + newMonth) + "-" + newYear;
-        } else if (plusMonths + monthInt < 1) {
-            const newMonth = plusMonths + monthInt + 12;
-            const newYear = yearInt - 1;
-
-            return (newMonth > 9 ? newMonth : "0" + newMonth) + "-" + newYear;
-        } else {
-            return ((monthInt + plusMonths) > 9 ? (monthInt + plusMonths) : "0" + (monthInt + plusMonths)) + "-" + yearInt;
+        if (newMonth > 12) {
+            newMonth -= 12;
+            newYear += 1;
+        } else if (newMonth < 1) {
+            newMonth += 12;
+            newYear -= 1;
         }
+
+        return `${newMonth.toString().padStart(2, '0')}-${newYear}`;
     } else {
         const date: Date = new Date();
-        return (date.getMonth() > 8 ? date.getMonth() + 1 : "0" + date.getMonth() + 1) + "-" + date.getFullYear();
+        return `${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getFullYear()}`;
     }
-
 }

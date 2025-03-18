@@ -1,6 +1,7 @@
 import React, {ChangeEvent, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import {getStoreValue, storeKeys} from "../functions/store.ts";
 interface loginRequest {
     username: string,
     password: string,
@@ -83,7 +84,7 @@ export default function LoginForm ({ setForm }: Props) {
         }
 
         const axiosRequest = async () => {
-            await axios.post('http://localhost:8080/api/v1/auth/login', request)
+            await axios.post(getStoreValue(storeKeys.baseUrl) + "/auth/login", request)
             .then(response => {
                 if (response.status === 200) {
                     console.log(response.data['token']);
