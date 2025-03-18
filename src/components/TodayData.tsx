@@ -10,7 +10,7 @@ interface Props {
 }
 
 
-export default function( { today, onClickFunction, customDeleteDate, setOnClickTrigger } : Props) {
+export default function( { today, onClickFunction, customDeleteDate  } : Props) {
 
     const [deleting, setDeleting] = useState(false);
 

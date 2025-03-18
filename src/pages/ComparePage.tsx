@@ -70,6 +70,7 @@ export default function ComparePage() {
                 sessionStorage.setItem(compObjString, JSON.stringify(response.data));
                 setResponse(response.data);
             }).catch(error => {
+                console.log(error)
                 navigate("/login");
             })
         }

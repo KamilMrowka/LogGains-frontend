@@ -188,7 +188,7 @@ export default function compareGraphSetter( { periodOneDataSet, periodTwoDataSet
                                         color: 'rgba(70, 70, 70)'
                                     },
                                     ticks: {
-                                        callback: function(value, index, ticks): string {
+                                        callback: function(_value, index, ticks): string {
                                             const chart = this.chart as Chart;
                                             if (periodLen === "month" && chart.data.labels) {
                                                 if (chart.data.labels && (index === 0 || index === ticks.length -1)) {
@@ -273,7 +273,7 @@ export default function compareGraphSetter( { periodOneDataSet, periodTwoDataSet
                                         color: 'rgba(70, 70, 70)'
                                     },
                                     ticks: {
-                                        callback: function(value, index, ticks): string {
+                                        callback: function(_value, index, ticks): string {
                                             const chart = this.chart as Chart;
                                             if (periodLen === "month" && chart.data.labels) {
                                                 if (chart.data.labels && (index === 0 || index === ticks.length -1)) {
